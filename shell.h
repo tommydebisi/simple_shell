@@ -29,17 +29,6 @@ typedef struct shell
 	char *command;
 } shell_t;
 
-/**
- * struct token - Singly linked list for token
- *
- * @value: value of token
- * @next: pointer to next token
- */
-typedef struct token
-{
-	char *value;
-	struct token *next;
-} token_t;
 
 /**
  * struct builtin - builtins
@@ -76,14 +65,13 @@ void handl_signint(int sig);
 void repl(shell_t *shell);
 
 /* env */
-void envir(void);
-void free_env(void);
+void manage_env_list(int free_vars);
+char **env_to_array(void);
 void set_env(const char *name, const char *value);
-char *_getenv(const char *name);
+char *_getenv(const char *name, int var);
 
 /* env2 */
-char **env_to_array(void);
-void free_array_env(char **env);
+void free_env_arr(char **env);
 
 /* executor */
 int parse_command(shell_t *shell, char *command);
@@ -93,6 +81,8 @@ int execute(shell_t *shell);
 int (*get_builtin_handl(const char *cmd))(shell_t *shell);
 int hsh_exit(shell_t *shell);
 int hsh_env(shell_t *shell);
+int hsh_setenv(shell_t *shell);
+int hsh_unsetenv(shell_t *shell);
 int hsh_cd(shell_t *shell);
 
 /* utils */

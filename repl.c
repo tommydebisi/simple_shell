@@ -18,7 +18,7 @@ void repl(shell_t *shell)
 		if (chr == -1)
 		{
 			free(cmd);
-			free_env();	/* free list */
+			manage_env_list(1);	/* free list */
 			write(STDOUT_FILENO, "\n", 2);
 			exit(EXIT_SUCCESS);
 		}

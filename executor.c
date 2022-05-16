@@ -12,7 +12,7 @@ char *_which(char *command)
 	char *path, *path_dup, *spath, *file;
 	struct stat st;
 
-	path = _getenv("PATH");
+	path = _getenv("PATH", 0);
 	if (!path)
 		return (NULL);
 
@@ -58,11 +58,6 @@ int execute(shell_t *shell)
 	int sys;
 	char *file, **env = env_to_array();
 
-	if (env == NULL)
-	{
-		free_array_env(env);
-		return (1);
-	}
 	file = _which(shell->argv[0]);
 	if (!file)
 	{
@@ -83,7 +78,7 @@ int execute(shell_t *shell)
 	else
 		wait(&sys);
 
-	free_array_env(env);
+	free_env_arr(env);
 	free(file);
 	return (1);
 }

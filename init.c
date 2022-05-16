@@ -8,21 +8,22 @@
 void initialize(shell_t *shell)
 {
 
+
 	shell->argv = NULL;
 	shell->command = NULL;
 
-	envir();
+	manage_env_list(0);
 }
 
 /**
  * uninitialize - frees shell data
  *
- * @shell: shell data
+ * @shell: struct holding the array we are freeing
  */
 void uninitialize(shell_t *shell)
 {
-	(void) shell;
-	free_env();
+	(void)shell;
+	manage_env_list(1);
 
 	/**
 	* for (i = 0; shell->argv[i]; i++)

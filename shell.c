@@ -13,6 +13,5 @@ int main(void)
 	signal(SIGINT, handl_signint);
 	repl(&shell);
 	uninitialize(&shell);
-
 	return (0);
 }

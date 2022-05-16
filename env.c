@@ -3,70 +3,95 @@
 static list_env *EnvVar;
 
 /**
- * envir - adds environment variables to linked list
+ * manage_env_list - initializes or frees the environment list
  *
- * Return: first node in the list
+ * @free_vars: If 1, free environment variables, otherwise initialize it.
  */
-void envir(void)
+void manage_env_list(int free_vars)
 {
-	list_env *head = NULL, *last_node = NULL, *new_node;
+	list_env *head = NULL, *last_node = NULL, *new_node, *current;
 	char *token;
 	int i;
 
+	if (free_vars)
+	{
+		current = head = EnvVar;
+
+		while (head != NULL)
+		{
+			current = current->next, free(head->name), free(head->content);
+			free(head);
+			head = current;	/* move to the next address */
+		}
+		EnvVar = NULL;
+		return;
+	}
 	for (i = 0; environ[i] != NULL; i++)
 	{
-		token = NULL;
-		new_node = NULL;
-		new_node = malloc(sizeof(list_env));
+		token = NULL, new_node = NULL, new_node = malloc(sizeof(list_env));
 		if (new_node == NULL)
-		{
-			free(new_node);
-			exit(1);
-		}
+			free(new_node), exit(1);
 
 		token = strtok(environ[i], "=");
 		if (token == NULL)
-		{
-			free(new_node);
-			exit(EXIT_FAILURE);
-		}
-		new_node->name = _strdup(token);
+			free(new_node), exit(EXIT_FAILURE);
 
+		new_node->name = _strdup(token);
 		token = strtok(NULL, "\n");
 		new_node->content = _strdup(token);
 		new_node->next = NULL;
-		/* add node at the end of list */
-		head = head == NULL ? new_node : head;
+
+		head = head == NULL ? new_node : head;	/* add node at end of list */
 		if (last_node != NULL)
 			last_node->next = new_node;
+
 		last_node = new_node;
 	}
 	EnvVar = head;
 }
 
 /**
- * free_env - free list holding environment vairables
+ * env_to_array - create environment array from list
  *
+ * Return: pointer to a malloced string of env variables
  */
-
-void free_env(void)
+char **env_to_array(void)
 {
-	list_env *current, *head;
+	list_env *node;
+	int n = 0, i = 0, j;
+	char **env = NULL;
 
-	current = head = EnvVar;
-
-	while (head != NULL)
+	node = EnvVar;
+	while (node != NULL)
 	{
-		current = current->next;
-		free(head->name);
-		free(head->content);
-		free(head);
-		/* move to the next address */
-		head = current;
+		n++;
+		node = node->next;
 	}
-	EnvVar = NULL;
-}
+	node = EnvVar;
+	env = malloc(sizeof(char *) * (n + 1));
 
+	while (node != NULL)
+	{
+		n = 0;
+		for (j = 0; node->name[j] != '\0'; j++)
+			n++;
+		n++;
+		for (j = 0; node->content[j] != '\0'; j++)
+			n++;
+		env[i] = malloc(sizeof(char) * (n + 1));
+		n = 0;
+		for (j = 0; node->name[j] != '\0'; j++, n++)
+			env[i][n] = node->name[j];
+		env[i][n] = '=', n++;
+		for (j = 0; node->content[j] != '\0'; j++, n++)
+			env[i][n] = node->content[j];
+		env[i][n] = '\0';
+		node = node->next;
+		i++;
+	}
+	env[i] = NULL;
+	return (env);
+}
 /**
  * set_env - changes enviroment variable and
  * adds variable to the end of the list
@@ -112,15 +137,35 @@ void set_env(const char *name, const char *value)
  * _getenv - get the address of environment variable
  *
  * @name: value to check in the enviroment variable
+ * @var: number passed in to unset env variable
  * Return: the address of environment variable or NULL if not there
+ * or good if unset is successful and bad if not
  */
-char *_getenv(const char *name)
+char *_getenv(const char *name, int var)
 {
 	/* Declare variables to be used */
-	list_env *current;
+	list_env *current, *previous;
 
-	current = EnvVar;
+	current = previous = EnvVar;
 
+	if (var)
+	{
+		while (current && previous)
+		{
+			if (_strcmp(name, current->name) == 0)
+			{
+				previous->next = current->next;
+				free(current->content);
+				free(current->name);
+				free(current);
+				return ("good");
+			}
+			/* move to the next node */
+			previous = current;
+			current = current->next;
+		}
+		return ("bad");
+	}
 	/* traverse list and check if name is present */
 	while (current != NULL)
 	{
@@ -129,6 +174,7 @@ char *_getenv(const char *name)
 			/* move to the next node */
 		current = current->next;
 	}
+
 	return (NULL);
 }
 
