@@ -19,6 +19,7 @@
 - **Handling of `ctrl + c` and `EOF`**
 - **Handling of arguments.**
 - **Handling of executables in `PATH` environment variable.**
+- **Handling of builtins `exit`, `env`**
 
 ## EXAMPLES
 ``` py

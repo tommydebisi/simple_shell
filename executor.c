@@ -56,8 +56,13 @@ int execute(shell_t *shell)
 {
 	pid_t pid;
 	int sys;
-	char *file, *env[] = {NULL};
+	char *file, **env = env_to_array();
 
+	if (env == NULL)
+	{
+		free_array_env(env);
+		return (1);
+	}
 	file = _which(shell->argv[0]);
 	if (!file)
 	{
@@ -78,6 +83,7 @@ int execute(shell_t *shell)
 	else
 		wait(&sys);
 
+	free_array_env(env);
 	free(file);
 	return (1);
 }

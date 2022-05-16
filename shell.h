@@ -81,6 +81,10 @@ void free_env(void);
 void set_env(const char *name, const char *value);
 char *_getenv(const char *name);
 
+/* env2 */
+char **env_to_array(void);
+void free_array_env(char **env);
+
 /* executor */
 int parse_command(shell_t *shell, char *command);
 int execute(shell_t *shell);
