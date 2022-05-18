@@ -1,5 +1,5 @@
 # SIMPLE SHELL
-![Gates of Shell](./shell.jpeg)
+![Gates of Shell](./img/shell.jpeg)
 **Replication of little _unix_ processes using knowledge of C Programming language functions learnt so far**
 <br>
 ## AIM & OBJECTIVES
@@ -20,7 +20,7 @@
 - **Handling of `ctrl + c` and `EOF`**
 - **Handling of arguments.**
 - **Handling of executables in `PATH` environment variable.**
-- **Handling of builtins `exit`, `env`, `setenv`, `unsetenv`**
+- **Handling of builtins `exit`, `env`, `setenv`, `unsetenv`, `cd`**
 
 ## EXAMPLES
 ``` py

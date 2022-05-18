@@ -16,6 +16,7 @@ int (*get_builtin_handl(const char *command))(shell_t *shell)
 		{"env", hsh_env},
 		{"setenv", hsh_setenv},
 		{"unsetenv", hsh_unsetenv},
+		{"cd", hsh_cd},
 		{NULL, NULL}
 	};
 

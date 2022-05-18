@@ -61,7 +61,7 @@ int execute(shell_t *shell)
 	file = _which(shell->argv[0]);
 	if (!file)
 	{
-		write(STDERR_FILENO, "Enter a Valid Command\n", 23);
+		error_message(shell);
 		return (1);
 	}
 

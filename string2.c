@@ -65,3 +65,103 @@ char *_strcat2(char *dest, char *src, char *s)
 
 return (charLen);
 }
+
+/**
+ * _isdigit - prints the return value is digit or not
+ * @str: string to check
+ * Return: 1 if it's digit and 0 otherwise
+ */
+int _isdigit(char *str)
+{
+	int i;
+
+	for (i = 0; str[i] != '\0'; i++)
+	{
+		if ((str[i] < '0' || str[i] > '9'))
+			return (0);
+	}
+	return (1);
+}
+
+/**
+ * _atoi - converts a string to an integer.
+ * @s: input string.
+ * Return: integer.
+ */
+int _atoi(char *s)
+{
+	unsigned int count = 0, size = 0, oi = 0, pn = 1, m = 1, i;
+
+	while (*(s + count) != '\0')
+	{
+		if (size > 0 && (*(s + count) < '0' || *(s + count) > '9'))
+			break;
+
+		if (*(s + count) == '-')
+			pn *= -1;
+
+		if ((*(s + count) >= '0') && (*(s + count) <= '9'))
+		{
+			if (size > 0)
+				m *= 10;
+			size++;
+		}
+		count++;
+	}
+
+	for (i = count - size; i < count; i++)
+	{
+		oi = oi + ((*(s + i) - 48) * m);
+		m /= 10;
+	}
+	return (oi * pn);
+}
+
+/**
+ * itoa - changes integer to string
+ *
+ * @num: number to be changed to string
+ * @str: buffer to add the string
+ * @base: base to be changed to
+ * Return: number converted to string
+ */
+char *itoa(int num, char *str, int base)
+{
+	int i = 0, isNegative = 0;
+
+	/* Handle 0 explicitly, otherwise empty string is printed for 0 */
+	if (num == 0)
+	{
+		str[i++] = '0';
+		str[i] = '\0';
+		return (str);
+	}
+
+	/* In standard itoa(), negative numbers are handled only with */
+	/* base 10. Otherwise numbers are considered unsigned. */
+	if (num < 0 && base == 10)
+	{
+		isNegative = 1;
+		num = -num;
+	}
+
+	/* Process individual digits */
+	while (num != 0)
+	{
+		int rem = num % base;
+
+		str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
+		num = num / base;
+	}
+
+	/* If number is negative, append '-' */
+	if (isNegative)
+		str[i++] = '-';
+
+	str[i] = '\0'; /* Append string terminator */
+
+	/* Reverse the string */
+	rev_string(str, i);
+
+	return (str);
+}

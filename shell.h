@@ -15,6 +15,7 @@
 #include <signal.h>
 #include <string.h>
 #include <errno.h>
+#include <limits.h>
 
 
 /**
@@ -22,11 +23,17 @@
  *
  * @argv: argument vector
  * @command: input command
+ * @exitcode: code to exit
+ * @countP: count the processes done
+ * @pName: Process name
  */
 typedef struct shell
 {
 	char **argv;
 	char *command;
+	int exitcode;
+	int countP;
+	char *pName;
 } shell_t;
 
 
@@ -93,6 +100,9 @@ char **tokenize(char *s);
 /* util.c */
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 char **_realloc2(char **ptr, unsigned int old_size, unsigned int new_size);
+void cd_to(char *dir);
+void error_message(shell_t *shell);
+void cd_prev(void);
 
 /* string functions */
 char *_strdup(const char *s);
@@ -102,5 +112,10 @@ char *_strcat(char *dest, const char *src);
 int _strcmp(const char *s1, const char *s2);
 char *_strcpy(char *dest, char *src);
 char *_strcat2(char *dest, char *src, char *s);
+int _isdigit(char *str);
+int _atoi(char *s);
+char *itoa(int num, char *str, int base);
+void rev_string(char *s, int len);
+
 
 #endif /* SHELL_H */

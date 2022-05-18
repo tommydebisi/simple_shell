@@ -7,12 +7,12 @@
  */
 void initialize(shell_t *shell)
 {
-
-
 	shell->argv = NULL;
 	shell->command = NULL;
+	shell->exitcode = 0;
+	shell->countP = 1;
 
-	manage_env_list(0);
+	manage_env_list(0);	/* create list of env variables */
 }
 
 /**

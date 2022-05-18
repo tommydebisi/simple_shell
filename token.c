@@ -22,6 +22,12 @@ char **tokenize(char *s)
 	}
 
 	token = strtok(s, TOKEN_DELIM);
+	if (!token)
+	{
+		free(argv);
+		return (NULL);
+	}
+
 	argv[0] = token;
 
 	for (i = 1; token; i++)

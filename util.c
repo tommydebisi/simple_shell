@@ -72,3 +72,61 @@ char **_realloc2(char **ptr, unsigned int old_size, unsigned int new_size)
 
 	return (newptr);
 }
+
+/**
+ * cd_to - moves to a directory
+ *
+ * @dir: directory to move to
+ */
+void cd_to(char *dir)
+{
+	char *home, *pwd, cwd[PATH_MAX];
+	int check;
+
+	getcwd(cwd, sizeof(cwd));
+	home = _strdup(cwd);
+	check = chdir(dir);
+	if (check == -1)
+	{
+		free(home);
+		write(STDERR_FILENO, "/bin/sh: ", 10);
+		write(STDERR_FILENO, "18: cd: can't cd to tim", 24);
+		return;
+	}
+	getcwd(cwd, sizeof(cwd));
+	pwd = _strdup(cwd);
+
+	set_env("PWD", pwd);
+	set_env("OLD_PWD", home);
+	free(home);
+	free(pwd);
+}
+
+/**
+ * cd_prev - moves to previous directory
+ */
+void cd_prev(void)
+{
+	char *home, *pwd, cwd[PATH_MAX], *wd;
+
+	pwd = _strdup(_getenv("PWD", 0));
+	home = _getenv("OLD_PWD", 0);
+
+	if (!home)	/* check if there's OLD_PWD */
+	{
+		getcwd(cwd, sizeof(cwd));
+		wd = _strdup(cwd);
+		set_env("OLD_PWD", wd);
+		free(wd);
+	}
+	home = _getenv("OLD_PWD", 0);
+	chdir(home);
+
+	getcwd(cwd, sizeof(cwd));
+	write(STDOUT_FILENO, cwd, _strlen(cwd));	/* write dir. path */
+	write(STDOUT_FILENO, "\n", 2);
+
+	set_env("PWD", home);
+	set_env("OLD_PWD", pwd);
+	free(pwd);
+}

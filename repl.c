@@ -8,23 +8,22 @@
 void repl(shell_t *shell)
 {
 	char *cmd;
-	int chr, flag, isLoop;
+	int chr, flag, isLoop, aty;
 
+	aty = isatty(STDIN_FILENO);
 	do {
 		isLoop = 1;
-		prompt();
+		if (aty == 1)
+			prompt();
 
 		cmd = read_line(&chr);
 		if (chr == -1)
 		{
 			free(cmd);
-			manage_env_list(1);	/* free list */
-			write(STDOUT_FILENO, "\n", 2);
-			exit(EXIT_SUCCESS);
+			if (aty == 1)
+				write(STDOUT_FILENO, "\n", 2);
+			return;
 		}
-
-		if (cmd == NULL)
-			continue;
 
 		flag = parse_command(shell, cmd);
 		if (flag == EXIT_IND)
