@@ -20,9 +20,8 @@ void repl(shell_t *shell)
 		if (chr == -1)
 		{
 			free(cmd);
-			if (aty != 1)
-				prompt();
-			write(STDOUT_FILENO, "\n", 2);
+			if (aty == 1)
+				write(STDOUT_FILENO, "\n", 2);
 			return;
 		}
 
