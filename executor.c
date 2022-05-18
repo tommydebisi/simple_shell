@@ -61,9 +61,12 @@ int execute(shell_t *shell)
 	file = _which(shell->argv[0]);
 	if (!file)
 	{
-		error_message(shell);
+		write_err(shell, 127);
 		return (1);
 	}
+
+	if (err_check(shell, file) == 1)
+		return (1);
 
 	pid = fork();
 	if (pid == 0)
@@ -81,4 +84,28 @@ int execute(shell_t *shell)
 	free_env_arr(env);
 	free(file);
 	return (1);
+}
+
+/**
+ * err_check - check for possible errors for file to be executed
+ *
+ * @shell: shell data
+ * @file: file to be execute
+ * Return: 0 for success otherwise 1
+ */
+int err_check(shell_t *shell, char *file)
+{
+	if (file == NULL)
+	{
+		write_err(shell, 127);
+		return (1);
+	}
+
+	if (access(file, X_OK) == -1)
+	{
+		write_err(shell, 126);
+		return (1);
+	}
+
+	return (0);
 }

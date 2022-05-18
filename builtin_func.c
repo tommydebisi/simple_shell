@@ -10,26 +10,22 @@ int hsh_exit(shell_t *shell)
 {
 	int stat;
 
-	if (shell->argv[2])
-	{
-		shell->exitcode = 1;
-		write(STDERR_FILENO, "hsh: exit: too many arguments\n", 31);
-		return (0);
-	}
 	if (shell->argv[1])
 	{
 		if (!_isdigit(shell->argv[1]))
 		{
-			shell->exitcode = 2;
-			write(STDERR_FILENO, "hsh: exit: numeric argument required\n", 38);
+			write_err(shell, 2);
+			return (0);
 		}
 		else
 		{
 			stat = _atoi(shell->argv[1]);
-			printf("atoi: %d\n", stat);
 			shell->exitcode = stat % 256;	/* max number is 255 */
 		}
+		return (EXIT_IND);
 	}
+	else
+		shell->exitcode = 0;
 	return (EXIT_IND);
 }
 

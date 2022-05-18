@@ -89,7 +89,7 @@ void cd_to(char *dir, shell_t *shell)
 	if (check == -1)
 	{
 		free(home);
-		cd_error(shell);
+		write_err(shell, 2);
 		return;
 	}
 	getcwd(cwd, sizeof(cwd));

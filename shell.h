@@ -83,6 +83,7 @@ void free_env_arr(char **env);
 /* executor */
 int parse_command(shell_t *shell, char *command);
 int execute(shell_t *shell);
+int err_check(shell_t *shell, char *file);
 
 /* builtins */
 int (*get_builtin_handl(const char *cmd))(shell_t *shell);
@@ -117,8 +118,13 @@ char *itoa(int num, char *str, int base);
 void rev_string(char *s, int len);
 
 /* Error Handlers */
-void error_message(shell_t *shell);
-void cd_error(shell_t *shell);
+char *cd_error(shell_t *shell);
+void write_err(shell_t *shell, int status);
+char *exit_error(shell_t *shell);
+void error_message(shell_t *shell, char *message, int status);
 
+/* getline */
+void assign_lineptr(char **lineptr, size_t *n, char *buffer, size_t count);
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
 
 #endif /* SHELL_H */
