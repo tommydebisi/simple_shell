@@ -75,10 +75,10 @@ char **_realloc2(char **ptr, unsigned int old_size, unsigned int new_size)
 
 /**
  * cd_to - moves to a directory
- *
- * @dir: directory to move to
+ * @dir: directory to move
+ * @shell: shell data
  */
-void cd_to(char *dir)
+void cd_to(char *dir, shell_t *shell)
 {
 	char *home, *pwd, cwd[PATH_MAX];
 	int check;
@@ -89,8 +89,7 @@ void cd_to(char *dir)
 	if (check == -1)
 	{
 		free(home);
-		write(STDERR_FILENO, "/bin/sh: ", 10);
-		write(STDERR_FILENO, "18: cd: can't cd to tim", 24);
+		cd_error(shell);
 		return;
 	}
 	getcwd(cwd, sizeof(cwd));

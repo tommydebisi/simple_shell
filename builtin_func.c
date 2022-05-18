@@ -103,7 +103,7 @@ int hsh_cd(shell_t *shell)
 	else if (_strcmp(shell->argv[1], "-") == 0)
 		cd_prev();
 	else
-		cd_to(shell->argv[1]);
+		cd_to(shell->argv[1], shell);
 
 	return (0);
 }

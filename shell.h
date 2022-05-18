@@ -100,8 +100,7 @@ char **tokenize(char *s);
 /* util.c */
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 char **_realloc2(char **ptr, unsigned int old_size, unsigned int new_size);
-void cd_to(char *dir);
-void error_message(shell_t *shell);
+void cd_to(char *dir, shell_t *shell);
 void cd_prev(void);
 
 /* string functions */
@@ -116,6 +115,10 @@ int _isdigit(char *str);
 int _atoi(char *s);
 char *itoa(int num, char *str, int base);
 void rev_string(char *s, int len);
+
+/* Error Handlers */
+void error_message(shell_t *shell);
+void cd_error(shell_t *shell);
 
 
 #endif /* SHELL_H */
