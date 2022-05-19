@@ -13,7 +13,7 @@ char *read_line(int *chr)
 	char *input = NULL;
 	size_t bufsize = BUFSIZE;
 
-	*chr = _getline(&input, &bufsize, stdin);
+	*chr = getline(&input, &bufsize, stdin);
 
 	return (input);
 }

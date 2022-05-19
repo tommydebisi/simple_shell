@@ -47,42 +47,34 @@ char *_which(char *command)
 }
 
 /**
- * execute - executes a command
+ * can_execute - check if a path can be executed
  *
- * @shell: shell data
+ * @path: path
  * Return: 0 on success otherwise 1
  */
-int execute(shell_t *shell)
+int check_exe(char *path)
 {
-	pid_t pid;
-	int sys;
-	char *file, **env = env_to_array();
+	struct stat st;
+	int i;
 
-	file = _which(shell->argv[0]);
-	if (!file)
+	for (i = 0; path[i]; i++) /* is a valid path */
 	{
-		write_err(shell, 127);
-		return (1);
+		if (path[i] == '.')
+		{
+			if (path[i + 1] == '/')
+				i++;
+			else if (path[i + 1] == '.' && path[i + 2] == '/')
+				i += 2;
+			else
+				return (1);
+		}
 	}
 
-	if (err_check(shell, file) == 1)
-		return (1);
-
-	pid = fork();
-	if (pid == 0)
+	if (stat(path, &st) == 0)
 	{
-		execve(file, shell->argv, env);
+		return (0);
 	}
-	else if (pid < 0)
-	{
-		perror(shell->argv[0]);
-		return (1);
-	}
-	else
-		wait(&sys);
 
-	free_env_arr(env);
-	free(file);
 	return (1);
 }
 
@@ -108,4 +100,52 @@ int err_check(shell_t *shell, char *file)
 	}
 
 	return (0);
+}
+
+/**
+ * execute - executes a command
+ *
+ * @shell: shell data
+ * Return: 0 on success otherwise 1
+ */
+int execute(shell_t *shell)
+{
+	pid_t pid;
+	int sys, flag;
+	char *file, **env = env_to_array();
+
+	flag = check_exe(shell->argv[0]);
+	if (flag == 0)
+	{
+		file = _strdup(shell->argv[0]);
+	}
+	else
+	{
+		file = _which(shell->argv[0]);
+		if (!file)
+		{
+			write_err(shell, 127);
+			return (1);
+		}
+	}
+
+	if (err_check(shell, file) == 1)
+		return (1);
+
+	pid = fork();
+	if (pid == 0)
+	{
+		execve(file, shell->argv, env);
+	}
+	else if (pid < 0)
+	{
+		perror(shell->argv[0]);
+		return (1);
+	}
+	else
+		wait(&sys);
+
+	free_env_arr(env);
+	free(file);
+	return (1);
 }

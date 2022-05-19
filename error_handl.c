@@ -14,7 +14,7 @@ void error_message(shell_t *shell, char *message, int status)
 	count = itoa(shell->countP, st, 10);
 	len2 = _strlen(count);
 	len3 = _strlen(shell->argv[0]);
-	len4 = _strlen(message) + 1;
+	len4 = _strlen(message);
 
 	write(STDERR_FILENO, shell->pName, len);
 	write(STDERR_FILENO, ": ", 3);
@@ -68,7 +68,7 @@ void write_err(shell_t *shell, int status)
  */
 char *cd_error(shell_t *shell)
 {
-	char *message, *template = ": cd can't cd to ";
+	char *message, *template = ": can't cd to ";
 	int len, len2;
 
 	len = _strlen(template);

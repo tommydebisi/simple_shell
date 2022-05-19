@@ -84,6 +84,7 @@ void free_env_arr(char **env);
 int parse_command(shell_t *shell, char *command);
 int execute(shell_t *shell);
 int err_check(shell_t *shell, char *file);
+int check_exe(char *path);
 
 /* builtins */
 int (*get_builtin_handl(const char *cmd))(shell_t *shell);
@@ -126,5 +127,9 @@ void error_message(shell_t *shell, char *message, int status);
 /* getline */
 void assign_lineptr(char **lineptr, size_t *n, char *buffer, size_t count);
 ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
+
+/* Evaluate.c */
+char *eval_cmd(shell_t *shell, char *cmd);
+char *com_remover(char *s);
 
 #endif /* SHELL_H */

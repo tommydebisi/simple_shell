@@ -22,10 +22,8 @@ int hsh_exit(shell_t *shell)
 			stat = _atoi(shell->argv[1]);
 			shell->exitcode = stat % 256;	/* max number is 255 */
 		}
-		return (EXIT_IND);
 	}
-	else
-		shell->exitcode = 0;
+
 	return (EXIT_IND);
 }
 

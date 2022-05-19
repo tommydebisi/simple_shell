@@ -21,6 +21,7 @@
 - **Handling of arguments.**
 - **Handling of executables in `PATH` environment variable.**
 - **Handling of builtins `exit`, `env`, `setenv`, `unsetenv`, `cd`**
+- **Handling of symbol `#`**
 
 ## EXAMPLES
 ``` py
