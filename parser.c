@@ -17,7 +17,7 @@ int parse_command(shell_t *shell, char *command)
 	command = eval_cmd(shell, command);
 	if (!command)
 		return (0);
-	
+
 	shell->command = command;
 	shell->argv = tokenize(command);
 

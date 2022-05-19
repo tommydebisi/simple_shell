@@ -47,7 +47,7 @@ char *_which(char *command)
 }
 
 /**
- * can_execute - check if a path can be executed
+ * check_exe - check if a path can be executed
  *
  * @path: path
  * Return: 0 on success otherwise 1

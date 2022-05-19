@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
- * remove_comment - removes comments from s.
+ * com_remover - removes comments from s.
  *
  * @s: Given string
  * Return: String without comment
