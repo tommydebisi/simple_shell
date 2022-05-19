@@ -128,7 +128,6 @@ int execute(shell_t *shell)
 			return (1);
 		}
 	}
-
 	if (err_check(shell, file) == 1)
 		return (1);
 
@@ -143,9 +142,12 @@ int execute(shell_t *shell)
 		return (1);
 	}
 	else
-		wait(&sys);
-
-	free_env_arr(env);
+	{
+		do {
+			waitpid(pid, &sys, WUNTRACED); /* return status of child */
+		} while (!WIFEXITED(sys) && !WIFSIGNALED(sys));
+	}
+	shell->exitcode = sys / 256, free_env_arr(env);
 	free(file);
 	return (1);
 }
