@@ -17,7 +17,7 @@ void error_message(shell_t *shell, char *message, int status)
 	len4 = _strlen(message);
 	len = len1 + len2 + len3 + len4 + 4;
 
-	full_message = malloc(sizeof(char) * len);
+	full_message = malloc(sizeof(char) * (len + 1));
 	if (!full_message)
 		return;
 	_strcpy(full_message, shell->pName);
@@ -26,6 +26,7 @@ void error_message(shell_t *shell, char *message, int status)
 	_strcat(full_message, ": ");
 	_strcat(full_message, shell->argv[0]);
 	_strcat(full_message, message);
+	_strcat(full_message, "\0");
 
 	write(STDERR_FILENO, full_message, len);
 	shell->exitcode = status % 256;
