@@ -8,27 +8,21 @@
  */
 void error_message(shell_t *shell, char *message, int status)
 {
-	int len, len1 = _strlen(shell->pName), len2, len3, len4;
-	char *count, st[PATH_MAX], *full_message;
+	int len = _strlen(shell->pName), len2, len3, len4;
+	char *count, st[PATH_MAX];
 
 	count = itoa(shell->countP, st, 10);
 	len2 = _strlen(count);
 	len3 = _strlen(shell->argv[0]);
 	len4 = _strlen(message);
-	len = len1 + len2 + len3 + len4 + 4;
 
-	full_message = malloc(sizeof(char) * (len + 1));
-	if (!full_message)
-		return;
-	_strcpy(full_message, shell->pName);
-	_strcat(full_message, ": ");
-	_strcat(full_message, count);
-	_strcat(full_message, ": ");
-	_strcat(full_message, shell->argv[0]);
-	_strcat(full_message, message);
-	_strcat(full_message, "\0");
+	write(STDERR_FILENO, shell->pName, len);
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, count, len2);
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, shell->argv[0], len3);
+	write(STDERR_FILENO, message, len4);
 
-	write(STDERR_FILENO, full_message, len);
 	shell->exitcode = status % 256;
 }
 
