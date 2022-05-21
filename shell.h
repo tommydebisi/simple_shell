@@ -103,7 +103,7 @@ char **tokenize(char *s);
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 char **_realloc2(char **ptr, unsigned int old_size, unsigned int new_size);
 void cd_to(char *dir, shell_t *shell);
-void cd_prev(void);
+void cd_prev(shell_t *shell);
 
 /* string functions */
 char *_strdup(const char *s);

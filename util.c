@@ -85,6 +85,7 @@ void cd_to(char *dir, shell_t *shell)
 
 	getcwd(cwd, sizeof(cwd));
 	home = _strdup(cwd);
+
 	check = chdir(dir);
 	if (check == -1)
 	{
@@ -96,7 +97,7 @@ void cd_to(char *dir, shell_t *shell)
 	pwd = _strdup(cwd);
 
 	set_env("PWD", pwd);
-	set_env("OLD_PWD", home);
+	set_env("OLDPWD", home);
 	free(home);
 	free(pwd);
 }
@@ -104,28 +105,16 @@ void cd_to(char *dir, shell_t *shell)
 /**
  * cd_prev - moves to previous directory
  */
-void cd_prev(void)
+void cd_prev(shell_t *shell)
 {
-	char *home, *pwd, cwd[PATH_MAX], *wd;
+	char *home, cwd[PATH_MAX];
 
-	pwd = _strdup(_getenv("PWD", 0));
-	home = _getenv("OLD_PWD", 0);
+	home = _getenv("OLDPWD", 0);
 
-	if (!home)	/* check if there's OLD_PWD */
-	{
-		getcwd(cwd, sizeof(cwd));
-		wd = _strdup(cwd);
-		set_env("OLD_PWD", wd);
-		free(wd);
-	}
-	home = _getenv("OLD_PWD", 0);
-	chdir(home);
+	if (home)
+		cd_to(home, shell);
 
 	getcwd(cwd, sizeof(cwd));
 	write(STDOUT_FILENO, cwd, _strlen(cwd));	/* write dir. path */
-	write(STDOUT_FILENO, "\n", 2);
-
-	set_env("PWD", home);
-	set_env("OLD_PWD", pwd);
-	free(pwd);
+	write(STDOUT_FILENO, "\n", 1);
 }

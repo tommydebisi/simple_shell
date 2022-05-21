@@ -83,19 +83,16 @@ int hsh_unsetenv(shell_t *shell)
  */
 int hsh_cd(shell_t *shell)
 {
-	char *home, *pwd;
+	char *home;
 
-	if (!(shell->argv[1]) && shell->argv[0])
+	if (!(shell->argv[1]) || _strcmp(shell->argv[1], "~") == 0)
 	{
-		pwd = _strdup(_getenv("PWD", 0));
 		home = _getenv("HOME", 0);
-		chdir(home);
-		set_env("PWD", home);
-		set_env("OLD_PWD", pwd);
-		free(pwd);
+		if (home)
+			cd_to(home, shell);
 	}
 	else if (_strcmp(shell->argv[1], "-") == 0)
-		cd_prev();
+		cd_prev(shell);
 	else
 		cd_to(shell->argv[1], shell);
 
