@@ -116,37 +116,40 @@ int execute(shell_t *shell)
 
 	flag = check_exe(shell->argv[0]);
 	if (flag == 0)
-	{
 		file = _strdup(shell->argv[0]);
-	}
 	else
 	{
 		file = _which(shell->argv[0]);
 		if (!file)
 		{
 			write_err(shell, 127);
+			free_env_arr(env);
 			return (1);
 		}
 	}
+
 	if (err_check(shell, file) == 1)
+	{
+		free_env_arr(env);
 		return (1);
+	}
 
 	pid = fork();
 	if (pid == 0)
-	{
 		execve(file, shell->argv, env);
-	}
 	else if (pid < 0)
 	{
 		perror(shell->argv[0]);
+		free_env_arr(env);
 		return (1);
 	}
 	else
-	{
-		do {
-			waitpid(pid, &sys, WUNTRACED); /* return status of child */
-		} while (!WIFEXITED(sys) && !WIFSIGNALED(sys));
-	}
+		{
+			do {
+				waitpid(pid, &sys, WUNTRACED);	/* return status of child */
+			} while (!WIFEXITED(sys) && !WIFSIGNALED(sys));
+		}
+
 	shell->exitcode = sys / 256, free_env_arr(env);
 	free(file);
 	return (1);
