@@ -122,8 +122,7 @@ int execute(shell_t *shell)
 		file = _which(shell->argv[0]);
 		if (!file)
 		{
-			write_err(shell, 127);
-			free_env_arr(env);
+			write_err(shell, 127), free_env_arr(env);
 			return (1);
 		}
 	}
@@ -139,8 +138,7 @@ int execute(shell_t *shell)
 		execve(file, shell->argv, env);
 	else if (pid < 0)
 	{
-		perror(shell->argv[0]);
-		free_env_arr(env);
+		perror(shell->argv[0]), free_env_arr(env);
 		return (1);
 	}
 	else
@@ -150,7 +148,6 @@ int execute(shell_t *shell)
 			} while (!WIFEXITED(sys) && !WIFSIGNALED(sys));
 		}
 
-	shell->exitcode = sys / 256, free_env_arr(env);
-	free(file);
+	shell->exitcode = sys / 256, free_env_arr(env), free(file);
 	return (1);
 }
